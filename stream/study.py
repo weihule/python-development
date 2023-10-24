@@ -1,18 +1,26 @@
 import os
 import cv2
+import numpy as np
 import streamlit as st
 
 
 # 创建一个函数来展示图片
-def show_image(image_path, caption):
-    image = cv2.imread(image_path)
+def show_image(image_info, caption):
+    if isinstance(image_info, str):
+        image = cv2.imread(image_info)
+    else:
+        image = image_info
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     st.image(image, caption=caption, use_column_width=True)
 
 
 # 创建一个函数来展示视频
-def show_video(video_path):
-    video_file = open(video_path, 'rb')
+def show_video(video_info):
+    if isinstance(video_info, str):
+        video_file = open(video_info, 'rb')
+    else:
+        video_file = video_info
+    
     st.video(video_file)
 
 
@@ -47,6 +55,18 @@ def main():
     selected_index = image_options.index(selected_image_index)
     selected_image = images[selected_index]
     show_image(selected_image["full"], caption=f"时间: {selected_image['time']}")
+
+    up_load_files = st.file_uploader(label="上传样片", 
+                               type=['jpg', 'png', 'avi', 'mp4'],
+                               accept_multiple_files=True)
+    for file in up_load_files:
+        if 'image' in file.type:
+            data = file.read()
+            img = cv2.imdecode(np.frombuffer(data, np.uint8), cv2.IMREAD_COLOR)
+            show_image(img, "上传")
+        elif 'video' in file.type:
+            data = file.read()
+            show_video(data)
 
 
 if __name__ == "__main__":
