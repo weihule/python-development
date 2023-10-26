@@ -14,7 +14,7 @@ async def detect_objects_in_image(files: List[UploadFile]):
     oi = ONNXInfer('./yolox_nano.onnx', 416, 416)
     results = []
     for file in files:
-        file_content = await file.read() 
+        file_content = await file.read()
         image = cv2.imdecode(np.frombuffer(file_content, np.uint8), cv2.IMREAD_COLOR)
         detection_result = oi(image)
         results.append(detection_result.tolist())  # 将 NumPy 数组转换为 Python 列表
