@@ -9,6 +9,7 @@ from onnx_infer import ONNXInfer, video_infer
 
 app = FastAPI()
 
+
 @app.post("/detect/")
 async def detect_objects_in_image(files: List[UploadFile]):
     oi = ONNXInfer('./yolox_nano.onnx', 416, 416)

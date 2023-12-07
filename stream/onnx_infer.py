@@ -162,7 +162,7 @@ class ONNXInfer(object):
         self.output_dir = output_dir
 
         self.onnx_session = onnxruntime.InferenceSession(onnx_file,
-                                                         providers=["CUDAExecutionProvider"])
+                                                         providers=["CPUExecutionProvider"])
         self.input_name = [self.onnx_session.get_inputs()[0].name]
         self.output_name = [self.onnx_session.get_outputs()[0].name]
 
