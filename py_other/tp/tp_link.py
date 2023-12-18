@@ -1,21 +1,23 @@
+import pywinauto
 from pywinauto.application import Application
-import lackey
-from keyboard import mouse
+import mouse
 import time
 
 
 def main():
-    app = Application().start("D:\ProgramFiles\TP-LINK\Surveillance\TP-LINK Surveillance.exe")
+    # 连接到已经打开的 "TP-LINK安防系统" 窗口
+    # app = Application(backend="uia").connect(title="TP-LINK安防系统")
+    app = Application().start(r"D:\ProgramFiles\TP-LINK\Surveillance\TP-LINK Surveillance.exe")
     time.sleep(2)  # 等待应用程序启动
-    # dlg = app.window(title="无标题 - 记事本")
 
-    lackey.find(r'./photo/all1.png', sim=0.8)
-    lackey.find(r'./photo/setting.png', sim=0.8)
-    lackey.find(r'./photo/vedio_out.png', sim=0.8)
-    lackey.find(r'./photo/today.png', sim=0.8)
+    dlg = app["TP-LINK安防系统"]
+    dlg.wait('exists enabled', timeout=10)  # 等待窗口出现
+    dlg.wait('ready', timeout=10)  # 等待窗口就绪
+    dlg.print_control_identifiers()
 
-    # app.window(title="无标题 - 记事本").close()  
-    # app.quit()
+    menu = dlg["Qt5QWindowIcon"]
+    print(menu.print_control_identifiers())
+    
 
 
 if __name__ == "__main__":
