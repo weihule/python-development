@@ -1,0 +1,71 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Video Gallery</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--    <div style="float: left; width: 30%;">-->
+<!--        <h2>Video List</h2>-->
+<!--        {% for video in videos %}-->
+<!--            <a href="{{ url_for('video_detail', video_path=video['video_path']) }}">-->
+<!--                <img src="{{ video['thumbnail'] }}" alt="{{ video['name'] }}" width="100">-->
+<!--                <p>{{ video['name'] }}</p>-->
+<!--            </a>-->
+<!--        {% endfor %}-->
+<!--    </div>-->
+
+<!--    <div style="float: left; width: 70%;">-->
+<!--        <h2>Video Detail</h2>-->
+<!--        <iframe id="video-frame" width="640" height="360" src="" frameborder="0" allowfullscreen></iframe>-->
+<!--    </div>-->
+
+<!--    <script>-->
+<!--        const videoLinks = document.querySelectorAll('a');-->
+<!--        const videoFrame = document.getElementById('video-frame');-->
+
+<!--        videoLinks.forEach(link => {-->
+<!--            link.addEventListener('click', (event) => {-->
+<!--                event.preventDefault();-->
+<!--                const videoPath = encodeURIComponent(link.getAttribute('href'));-->
+<!--                videoFrame.src = '{{ url_for("video_detail", video_path="" ) }}' + videoPath;-->
+<!--            });-->
+<!--        });-->
+<!--    </script>-->
+
+<!--    <h2>Local Video Player</h2>-->
+<!--    <div class="c-video">-->
+<!--        <video controls width="600" src="file:///D:/Video/20231213/Download/1_small.mp4">-->
+<!--            Your browser does not support the video tag.-->
+<!--        </video>-->
+<!--    </div>-->
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player</title>
+</head>
+<body>
+    <h2>Videos</h2>
+    <div>
+        {% for video in videos %}
+            <p>
+                <a href="{{ url_for('get_video', filename=video.name) }}">{{ video.name }}</a>
+            </p>
+        {% endfor %}
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+

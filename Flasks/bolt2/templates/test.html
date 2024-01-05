@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Layout</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .left-sidebar {
+            flex: 1;
+            background-color: #f0f0f0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .right-content {
+            flex: 2;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .right-content {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="left-sidebar">
+        <!-- 左侧组件内容 -->
+        <ul class="layui-nav layui-nav-tree">
+            <li class="layui-nav-item">
+                <a href="javascript:;">10#</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="javascript:;">选项1</a></dd>
+                    <dd><a href="javascript:;">选项2</a></dd>
+                    <dd><a href="javascript:;">选项3</a></dd>
+                </dl>
+            </li>
+            <!-- 其他左侧菜单项 -->
+        </ul>
+    </div>
+
+    <div class="right-content">
+        <!-- 右侧组件内容 -->
+        <div class="date-picker-container">
+            <!-- 日期选择框内容 -->
+            <div class="layui-form-item">
+                <label class="layui-form-label">选择日期</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="datePicker" placeholder="请选择日期">
+                </div>
+            </div>
+            <button class="layui-btn" onclick="getDate()">获取选中的日期</button>
+        </div>
+
+        <!-- 视频容器内容 -->
+        <div id="video-container" class="date-video-container">
+            <video controls>
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#datePicker',
+            type: 'datetime'
+        });
+    });
+
+    function getDate() {
+        var selectedDate = layui.$('#datePicker').val();
+        alert('选中的日期是：' + selectedDate);
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player</title>
+
+    <!-- 引入 Layui 的样式和脚本 -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/layui.css') }}">
+    <script src="{{ url_for('static', filename='/layui.js') }}"></script>
+
+    <style>
+        .date-picker-container {
+        position: fixed;
+        top: 20px;
+        right: 230px;
+        width: 200px; /* 调整容器宽度 */
+        }
+
+        body {
+            display: flex;
+            align-items: flex-start;
+            padding: 20px;
+        }
+
+        #video-container {
+            width: 900px;
+            height: 800px;
+            position: relative;
+        }
+
+        .date-video-container {
+        position: fixed;
+        top: 80px;
+        left: 100px;
+        width: 600px; /* 调整容器宽度 */
+        }
+
+        .date-video-container video {
+        width: 100%; /* 使视频宽度充满容器 */
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .select-container {
+            margin-bottom: 10px;
+        }
+
+        select {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+
+        #video-list {
+            width: 30%;
+            margin-left: auto;
+        }
+
+        #video-list a {
+            display: block;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #333;
+            transition: background-color 0.3s;
+            margin-bottom: 5px;
+        }
+
+        #video-list a:hover {
+            background-color: #eee;
+        }
+
+        .video-list-container {
+        position: fixed;
+        top: 200px;
+        right: 2px;
+        width: 200px; /* 调整容器宽度 */
+        }
+
+        .custom-nav-container {
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100%; /* 菜单高度充满整个页面 */
+        width: 200px; /* 调整菜单宽度 */
+        background-color: #333; /* 菜单背景颜色 */
+        color: #fff; /* 菜单文字颜色 */   }
+
+        .custom-nav-container .layui-nav {
+        height: calc(100% - 20px); /* 保留一些间距，防止滚动条遮挡 */
+        }
+
+        .custom-nav-container .layui-nav-item a {
+        color: #fff; /* 调整菜单项文字颜色 */
+        }
+    </style>
+</head>
+<body>
+    <!-- 自定义菜单容器 -->
+<!--    <div class="custom-nav-container">-->
+<!--        <ul class="layui-nav layui-nav-tree">-->
+<!--            <li class="layui-nav-item">-->
+<!--                <a href="javascript:;">10#</a>-->
+<!--                <dl class="layui-nav-child">-->
+<!--                    <dd><a href="javascript:;">选项1</a></dd>-->
+<!--                    <dd><a href="javascript:;">选项2</a></dd>-->
+<!--                    <dd><a href="javascript:;">选项3</a></dd>-->
+<!--                </dl>-->
+<!--            </li>-->
+<!--            <li class="layui-nav-item">-->
+<!--                <a href="javascript:;">11#</a>-->
+<!--                <dl class="layui-nav-child">-->
+<!--                    <dd><a href="javascript:;">选项1</a></dd>-->
+<!--                    <dd><a href="javascript:;">选项2</a></dd>-->
+<!--                    <dd><a href="javascript:;">选项3</a></dd>-->
+<!--                </dl>-->
+<!--            </li>-->
+<!--            <li class="layui-nav-item"><a href="javascript:;">菜单1</a></li>-->
+<!--            <li class="layui-nav-item"><a href="javascript:;">菜单2</a></li>-->
+<!--            <li class="layui-nav-item"><a href="javascript:;">菜单3</a></li>-->
+<!--        </ul>-->
+<!--    </div>-->
+
+    <div class="date-picker-container">
+        <div class="layui-form-item">
+            <label class="layui-form-label">选择日期</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" id="datePicker" placeholder="请选择日期">
+            </div>
+        </div>
+        <button class="layui-btn" onclick="getDate()">获取选中的日期</button>
+    </div>
+
+    <script>
+        layui.use('laydate', function(){
+            var laydate = layui.laydate;
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#datePicker', //指定元素
+                <!-- 加上这个就会附带时间了 -->
+                // type: 'datetime'  // 指定日期选择框类型为日期时间
+            });
+        });
+
+        function getDate() {
+            var selectedDate = layui.$('#datePicker').val();
+            alert('选中的日期是：' + selectedDate);
+        }
+    </script>
+
+    <!-- 视频容器 -->
+    <div id="video-container" class="date-video-container">
+        <video controls>
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <!-- 视频选择列表 -->
+    <div id="video-list" class="video-list-container">
+        <h2>Videos</h2>
+
+        <div class="select-container">
+            <label for="category0">10#:</label>
+            <select id="category0" onchange="playSelectedVideo(this)">
+            {% for video in videos %}
+                <option value="{{ url_for('get_video', filename=video.name) }}">{{ video.name }}</option>
+            {% endfor %}
+            </select>
+        </div>
+
+        <!-- 第一个下拉菜单 -->
+        <div class="select-container">
+            <label for="category1">11#:</label>
+            <select id="category1" onchange="playSelectedVideo(this)">
+                <option value="{{ url_for('get_video', filename='1_small.mp4') }}">Video 1</option>
+                <option value="{{ url_for('get_video', filename='cat1_video2.mp4') }}">Video 2</option>
+            </select>
+        </div>
+
+        <!-- 第二个下拉菜单 -->
+        <div class="select-container">
+            <label for="category2">12#:</label>
+            <select id="category2" onchange="playSelectedVideo(this)">
+                <option disabled selected>Select a video</option>
+                <option value="{{ url_for('get_video', filename='cat2_video1.mp4') }}">Video 1</option>
+                <option value="{{ url_for('get_video', filename='cat2_video2.mp4') }}">Video 2</option>
+            </select>
+        </div>
+
+        <!-- 第三个下拉菜单 -->
+        <div class="select-container">
+            <label for="category3">13#:</label>
+            <select id="category3" onchange="playSelectedVideo(this)">
+                <option disabled selected>Select a video</option>
+                <option value="{{ url_for('get_video', filename='cat3_video1.mp4') }}">Video 1</option>
+                <option value="{{ url_for('get_video', filename='cat3_video2.mp4') }}">Video 2</option>
+            </select>
+        </div>
+
+        <!-- 链接演示 -->
+        <a href="javascript:void(0);" onclick="playVideo('{{ url_for('get_video', filename='custom_video.mp4') }}')">Custom Video</a>
+    </div>
+
+    <script>
+        function playSelectedVideo(selectElement) {
+            var selectedOption = selectElement.options[selectElement.selectedIndex];
+            if (selectedOption.value) {
+                playVideo(selectedOption.value);
+            }
+        }
+
+        function playVideo(videoPath) {
+            var videoPlayer = document.querySelector('video');
+            videoPlayer.src = videoPath;
+            videoPlayer.load();
+            videoPlayer.play();
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
