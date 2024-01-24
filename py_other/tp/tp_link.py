@@ -5,9 +5,13 @@ import time
 
 
 def main():
-    # 连接到已经打开的 "TP-LINK安防系统" 窗口
-    # app = Application(backend="uia").connect(title="TP-LINK安防系统")
-    app = Application(backend="uia").start(r"D:\ProgramFiles\TP-LINK\Surveillance\TP-LINK Surveillance.exe")
+    try:
+        app = Application(backend="uia").connect(title="TP-LINK安防系统")
+    except Exception as e:
+        print(e)
+        print("已打开TP-LINK安防系统, 现连接该窗口")
+        # 连接到已经打开的 "TP-LINK安防系统" 窗口
+        app = Application(backend="uia").start(r"D:\ProgramFiles\TP-LINK\Surveillance\TP-LINK Surveillance.exe")
     time.sleep(2)  # 等待应用程序启动
 
     dlg = app["TP-LINK安防系统"]
