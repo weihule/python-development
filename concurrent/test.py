@@ -1,21 +1,26 @@
 from time import sleep
 import threading
 
-
+# 创建一个互斥锁
+mutex = threading.Lock()
 NUM = 0
 
 
 def task1(number):
     global NUM
+    mutex.acquire()
     for i in range(number):
         NUM += 1
+    mutex.release()
     print(f"in task1 NUM = {NUM}")
 
 
 def task2(number):
     global NUM
+    mutex.acquire()
     for i in range(number):
         NUM += 1
+    mutex.release()
     print(f"in task2 NUM = {NUM}")
 
 
