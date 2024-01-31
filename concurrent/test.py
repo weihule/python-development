@@ -5,21 +5,24 @@ import threading
 NUM = 0
 
 
-def task1():
+def task1(number):
     global NUM
-    NUM = 10
+    for i in range(number):
+        NUM += 1
     print(f"in task1 NUM = {NUM}")
 
 
-def task2():
+def task2(number):
+    global NUM
+    for i in range(number):
+        NUM += 1
     print(f"in task2 NUM = {NUM}")
 
 
 def main1():
-    t1 = threading.Thread(target=task1)
-    t2 = threading.Thread(target=task2)
+    t1 = threading.Thread(target=task1, args=(1000000, ))
+    t2 = threading.Thread(target=task2, args=(1000000, ))
     t1.start()
-    sleep(2)
     t2.start()
 
 
